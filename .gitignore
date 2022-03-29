@@ -1,4 +1,7 @@
-.idea/
-.vendor/
-.var/
-.env.local
+/.idea/
+/.env.local
+/.env.local.php
+/.env.*.local
+/public/bundles/
+/var/
+/vendor/
