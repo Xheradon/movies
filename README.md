@@ -1,7 +1,7 @@
 ## Uso del proyecto
 
 1. Clonar el proyecto en local
-2. Ejecutar `docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d`
+2. Ejecutar `docker-compose -f docker-compose.yml up -d`
 3. Esperar a la inicialización de la base de datos y comprobar que el proyecto es visible en 
 [localhost/admin](http://localhost/admin)
 4. Conectarse al contenedor de php con `docker exec -it <nombre contenedor php> sh`
