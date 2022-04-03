@@ -23,6 +23,7 @@ use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 class ImportMoviesCsvCommand extends Command
 {
     protected const DEFAULT_FILENAME = 'movies.csv';
+    protected const DEFAULT_EM_BATCH_SIZE = 500;
 
     protected const IMPORT_ID_COLUMN_NAME = 'imdb_title_id';
     protected const TITLE_COLUMN_NAME = 'title';
@@ -69,7 +70,7 @@ class ImportMoviesCsvCommand extends Command
                 name: 'em-batch-size',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'EM batch size',
-                default: MovieImporter::DEFAULT_EM_BATCH_SIZE
+                default: self::DEFAULT_EM_BATCH_SIZE
             );
     }
 
