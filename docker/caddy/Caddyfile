@@ -1,0 +1,27 @@
+{
+    # Debug
+    {$DEBUG}
+    # HTTP/3 support
+    servers {
+        protocol {
+            experimental_http3
+        }
+    }
+
+    auto_https off
+}
+
+{$SERVER_NAME}
+
+log
+
+route {
+    root * /srv/api/public
+
+    # Comment the following line if you don't want Next.js to catch requests for HTML documents.
+    # In this case, they will be handled by the PHP app.
+    # reverse_proxy @pwa http://{$PWA_UPSTREAM}
+    php_fastcgi {$PHP_SERVICE}:9000
+    encode zstd gzip
+    file_server
+}
