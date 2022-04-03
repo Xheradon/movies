@@ -1,0 +1,58 @@
+version: "3.4"
+
+services:
+  php:
+    build:
+      context: .
+      target: movies_php
+    image: movies-php:${COMMIT}
+    depends_on:
+      - database
+    volumes:
+      - .:/srv/api:rw,cached
+      - ./var:/srv/api/var:rw
+    restart: unless-stopped
+    healthcheck:
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 30s
+
+  caddy:
+    build:
+      context: .
+      target: movies_caddy
+    image: movies-caddy:${COMMIT}
+    depends_on:
+      - php
+    environment:
+      SERVER_NAME: ${SERVER_NAME:-localhost, :80}
+      PHP_SERVICE: php
+    restart: unless-stopped
+    volumes:
+      - caddy_data:/data
+      - caddy_config:/config
+    ports:
+      - target: 80
+        published: ${CADDY_HTTP_TCP_PORT}
+        protocol: tcp
+
+  database:
+    image: postgres:13-alpine
+    shm_size: '128m'
+    environment:
+      - POSTGRES_DB=movies
+      - POSTGRES_PASSWORD=movies
+      - POSTGRES_USER=movies
+    restart: unless-stopped
+    ports:
+      - target: 5432
+        published: 54320
+        protocol: tcp
+    volumes:
+      - db_data:/var/lib/postgresql/data:rw
+
+volumes:
+  db_data:
+  caddy_data:
+  caddy_config:

@@ -1,0 +1,46 @@
+version: "3.4"
+
+# Development environment override
+services:
+  php:
+    build:
+      context: .
+      target: movies_php
+    volumes:
+      - ./docker/php/conf.d/movies.dev.ini:/usr/local/etc/php/conf.d/movies.ini
+      - ./docker/php/docker-entrypoint.dev.sh:/usr/local/bin/docker-entrypoint
+      - ./var:/srv/api/var:rw
+    env_file:
+      - .env.local
+    environment:
+      APP_ENV: dev
+
+  caddy:
+    volumes:
+      - ./docker/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./public:/srv/api/public:ro
+    environment:
+      SERVER_NAME: ${SERVER_NAME:-localhost, :80}
+    ports:
+      - target: 80
+        published: ${CADDY_HTTP_TCP_PORT}
+        protocol: tcp
+
+  database:
+    shm_size: '128m'
+    ports:
+      - target: 5432
+        published: 54320
+        protocol: tcp
+    volumes:
+      - './docker/database/data:/root/backups'
+    command: ["postgres", "-c", "log_statement=all"]
+
+  blackfire:
+    image: blackfire/blackfire:2
+    env_file: .env.local
+    environment:
+      BLACKFIRE_LOG_LEVEL: 4
+      BLACKFIRE_DISABLE_LEGACY_PORT: 1
+    ports:
+      - '8307'
