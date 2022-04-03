@@ -76,14 +76,7 @@ abstract class AbstractPerson
         return $this;
     }
 
-    public function addFilm(Film $film): self
-    {
-        if (!$this->films->contains($film)) {
-            $this->films->add($film);
-        }
-
-        return $this;
-    }
+    abstract public function addFilm(Film $film): self;
 
     public function removeFilm(Film $film): self
     {

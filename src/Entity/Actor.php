@@ -26,6 +26,16 @@ class Actor extends AbstractPerson
      */
     protected Collection $films;
 
+    public function addFilm(Film $film): self
+    {
+        if (!$this->films->contains($film)) {
+            $this->films->add($film);
+            $film->addActor($this);
+        }
+
+        return $this;
+    }
+
     public function getDeathDate(): ?DateTimeInterface
     {
         return $this->deathDate;
