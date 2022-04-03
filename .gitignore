@@ -3,5 +3,6 @@
 /.env.local.php
 /.env.*.local
 /public/bundles/
+!/var/storage
 /var/
 /vendor/
